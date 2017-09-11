@@ -1,0 +1,140 @@
+%
+% Copyright (c) 1996, 2004, 2006, 2009, 2014, 2016
+% Tama Communications Corporation. All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions
+% are met:
+% 1. Redistributions of source code must retain the above copyright
+%    notice, this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright
+%    notice, this list of conditions and the following disclaimer in the
+%    documentation and/or other materials provided with the distribution.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+% ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+% IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+% ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+% FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+% DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+% OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+% HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+% LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+% OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+% SUCH DAMAGE.
+%
+\documentclass{jarticle}
+\usepackage{rireki}
+%
+% オプション
+%
+% 下記のオプションが利用可能です。
+%
+% \空行挿入		% 学歴と職歴の間に空行を挿入します
+\begin{document}
+%
+% ID情報
+%
+\姓{\Large 履歴}
+\名{\Large 一朗}
+\姓読み{りれき}
+\名読み{いちろう}
+\性別{男}					% 男|女
+\誕生日{平成1年2月3日}
+\年齢{35}
+%
+% 顔写真
+%
+% 画像ファイルにはEPS フォーマット・縦横比4:3 のものをご使用ください。
+% 縦を4cm に調整し、縦横比を変更せずに印刷します。
+% 次のように指定します。
+% \顔写真{photo.eps}
+%
+\顔写真{}
+%
+% 現住所
+%
+\現住所郵便番号{123}
+\現住所{◯◯市◯◯町 1--2--3}
+\現住所読み{まるまるし まるまるちょう}
+\現住所市外局番{0123}
+\現住所電話番号{45-6789}
+\現住所呼び出し{◯◯ 方}
+%
+% 連絡先
+%
+\連絡先郵便番号{}
+\連絡先{\tt taro@network.or.jp}
+\連絡先読み{}
+\連絡先市外局番{}
+\連絡先電話番号{1234-56-7890}
+\連絡先呼び出し{}
+%
+% 学歴、職歴
+%
+% 学歴、職歴を年月順に列挙してください。合計20個まで記入出来ます。
+% 20個を超える部分は印刷されませんので、ご注意ください。
+% 印刷順は、学歴=>職歴の順になります。
+%
+\学歴{平成1}{4}{◯◯市立◯◯高等学校 入学}      % {年}{月}{内容}
+\学歴{平成2}{3}{◯◯市立◯◯高等学校 卒業}
+\学歴{平成3}{4}{◯◯大学 入学}
+\学歴{平成4}{3}{◯◯大学 卒業}
+\学歴{平成5}{4}{◯◯大学大学院 入学}
+\学歴{平成6}{3}{◯◯大学大学院 修了}
+\学歴{平成7}{4}{専門学校◯◯ 入学}
+\学歴{平成8}{3}{専門学校◯◯ 卒業}
+\職歴{平成9}{4}{株式会社◯◯ 入社}
+\職歴{平成10}{9}{株式会社◯◯ 退職}
+\職歴{平成11}{10}{株式会社◯◯ 入社}
+\職歴{平成12}{10}{株式会社◯◯ 退職}
+\職歴{平成13}{10}{有限会社◯◯ 入社}
+\職歴{平成14}{8}{有限会社◯◯ 退職}
+\学歴{平成15}{9}{◯◯◯大学 入学（海外留学）}
+\学歴{平成16}{9}{◯◯◯大学 中退}
+\職歴{平成17}{10}{株式会社◯◯ 入社}
+\職歴{平成18}{10}{株式会社◯◯ 退職}
+\職歴{平成18}{10}{現在無職}
+%
+% 資格
+%
+% 資格を取得年月順に列挙してください。9つまで記入できます。
+% 9つを超える部分は印刷されませんので、ご注意ください。
+%
+\資格{平成1}{4}{普通自動車一種免許}            % {取得年}{取得月}{資格}
+\資格{平成2}{9}{自動二輪免許}
+\資格{平成3}{4}{第二種情報処理技術者}
+\資格{平成4}{4}{第一種情報処理技術者}
+\資格{平成5}{3}{宅地取り引き主任者}
+%
+% 個人情報
+%
+% 志望の動機と本人希望記入欄はlatex のコマンドを記述できます。
+%
+\志望の動機{
+	\begin{tabular}{ll}
+	{\gt 志望の動機} & ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯\\
+	{\gt 特技} & ◯◯◯\\
+	{\gt 好きな学科} & ◯◯◯\\
+	{\gt アピールポイント} & ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯\\
+	\end{tabular}
+}
+\本人希望記入欄{
+	私が希望する仕事の条件は下記の通りです。
+	\begin{itemize}
+	\item ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯
+	\item ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯
+	\item ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯
+	\end{itemize}
+}
+%
+% その他
+%
+\通勤時間{約 1時間30分}
+\扶養家族数{2}					% 人数(配偶者を除きます)
+\配偶者{あり}					% あり|なし
+\配偶者の扶養義務{なし}				% あり|なし
+
+\サイン{Your Signature}
+
+\end{document}

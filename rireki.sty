@@ -1,0 +1,562 @@
+%
+% Copyright (c) 1996, 2004, 2013, 2014, 2016
+% Tama Communications Corporation. All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions
+% are met:
+% 1. Redistributions of source code must retain the above copyright
+%    notice, this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright
+%    notice, this list of conditions and the following disclaimer in the
+%    documentation and/or other materials provided with the distribution.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+% ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+% IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+% ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+% FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+% DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+% OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+% HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+% LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+% OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+% SUCH DAMAGE.
+%
+%	rireki.sty	Version 2.7
+%
+\typeout{`Rireki style(B5)'}
+\usepackage[dvipdfmx]{graphicx}
+%----------------------------------------------------------------------------
+%
+% スタイルファイル実装メモ
+%
+%----------------------------------------------------------------------------
+%
+% 0. 用紙
+%
+%	B5 用紙を使用します。
+%	
+% 1. 座標
+%
+%	本スタイルファイルで使用している座標は、用紙の左上が原点で、
+%	単位は mm です。
+%
+% 2. ページ原点
+%
+%	ページ毎にページ原点を設定しています。
+%
+%	\def\ROOT@X{0}		% ページ原点X(紙の左端からの距離mm)
+%	\def\ROOT@Y{0}		% ページ原点Y(紙の上端からの距離mm)
+%
+%	トンボ以外のすべての描画はページ原点を基準に行なわれるので、
+%	この値を変更することで、ページ全体のプリント位置を変更できます。
+%
+% 3. \Put コマンド
+%
+%	本スタイルファイルでは、ひとまとまりの描画を他と独立したものに
+%	するため、\SetPos(x,y)コマンドで基準位置を決め、\Put(x,y)コマンドで
+%	そこからの相対位置を指定するという二段構えで描画を行なっています。
+%
+%	出力の例を次に示します。
+%
+%	\def\ROOT@X{5}
+%	\def\ROOT@Y{5}
+%	\SetPos(10,10) {
+%		\Put(10,5){\makebox(10,2.5)[l]{文字列}}
+%	}
+%
+%                \ROOT@X   \SetPos   \Put
+%	        +5        +10       +10
+%           0    5    10   15   20   25   30   35
+%          0+----+----|----+----|----+----|----+-------------------------
+%           |    .                    
+%           |    .                    
+% \ROOT@Y  5+....+..........          
+% +5        |    .(5,5)    .          
+%           |    .         .          
+%           |    .         .          
+%           |    .         .          
+% \SetPos 15+    ..........+.........|<-  10 ->|
+% +10       |              .(10,10)  +---------+-
+%           |              .         |文字列   |2.5
+% \Put    20+              ..........+---------+-
+% +5        |                        (10,5) => 最終的な座標(25,20)
+%
+%----------------------------------------------------------------------------
+%
+% 各種定義
+%
+%----------------------------------------------------------------------------
+\def\width{182}			% ページ幅(B5)
+\def\height{257}		% ページ高(B5)
+\def\ROOT@X{0}			% ページ原点X(紙の左端からの距離mm)
+\def\ROOT@Y{0}			% ページ原点Y(紙の上端からの距離mm)
+\topmargin      = -1in
+\oddsidemargin  = -1in
+\evensidemargin = -1in
+\headheight     = 0mm
+\headsep        = 0mm
+\parindent      = 0mm
+\textwidth      = \width mm
+\textheight     = \height mm
+\unitlength     = 1mm
+\pagestyle{empty}
+%----------------------------------------------------------------------------
+%
+% 座標値計算マクロ
+%
+%	\Add{10}{3}{\answer}	-> \answer = 10+3
+%	\Sub{10}{3}{\answer}	-> \answer = 10-3
+%
+%----------------------------------------------------------------------------
+{\catcode`\p=12\catcode`\t=12\gdef\num#1pt{#1}}
+\newdimen\result
+\def\Add#1#2#3{\result=#1pt \advance\result by #2pt
+	\edef#3{\expandafter\num\the\result}
+}
+\def\Sub#1#2#3{\result=#1pt \advance\result by -#2pt
+	\edef#3{\expandafter\num\the\result}
+}
+%----------------------------------------------------------------------------
+%
+% 左上を原点とする\put コマンド
+%
+%	\SetPos(#1,#2)#3	移動基準点を設定
+%	\Put(x,y)		移動基準点を左上原点とする\put
+%	\MultiPut(x,y)		移動基準点を左上原点とする\multiput
+%
+%----------------------------------------------------------------------------
+\def\SetPos(#1,#2)#3{
+	\Add{#1}\ROOT@X\root@x
+	\Add{#2}\ROOT@Y\root@y
+        {#3}
+}
+\def\Put(#1,#2)#3{
+	\Add\root@x{#1}\xpos		% 移動基準点との相対位置
+	\Add\root@y{#2}\ypos
+	\Sub\height\ypos\ypos		% 左上を原点に変更する
+	\put(\xpos,\ypos){#3}
+}
+\def\MultiPut(#1,#2)(#3,#4)#5#6{
+	\Add\root@x{#1}\xpos
+	\Add\root@y{#2}\ypos
+	\Sub\height\ypos\ypos
+	\multiput(\xpos,\ypos)(#3,#4){#5}{#6}
+}
+%----------------------------------------------------------------------------
+%
+% 太枠ボックス描画
+%
+%	\ThickBox(幅,高さ)
+%
+% 描画位置は\SetPos()で指定して下さい。
+%
+%----------------------------------------------------------------------------
+\def\ThickBox(#1,#2){
+	\linethickness{0.5mm}
+	\Add{#1}{0.5}{\w}
+	\Put(-0.25,0){\line(1,0){\w}}
+	\Put(0,0){\line(0,-1){#2}}
+	\Put(-0.25,#2){\line(1,0){\w}}
+	\Put(#1,0){\line(0,-1){#2}}
+	\linethickness{0.1mm}
+}
+%----------------------------------------------------------------------------
+%
+% リスト操作マクロ
+%
+%	\追加\リスト\アイテム	アイテムをリストに追加します。
+%	\分解\アイテム		アイテムを分解します。
+%
+%	アイテム中の要素は':'で区切られています。
+%
+%----------------------------------------------------------------------------
+\def\@学歴リスト{}
+\def\@職歴リスト{}
+\def\@資格リスト{}
+\def\@家族リスト{}				% 旧版との互換性のため
+\def\追加#1#2{
+	\ifx#1\empty\edef#1{#2}
+	\else\edef#1{#1,#2}
+	\fi
+}
+\def\分解#1:#2:#3:{
+	\def\one{#1}\def\two{#2}\def\three{#3}
+}
+%
+% 学歴職歴リスト編集
+%
+\def\履歴リスト１行の高さ{7.68421}
+\def\履歴リスト前半行数{19}
+\def\履歴リスト後半行数{4}
+\def\履歴説明幅{124.5}
+\newcount\linecount\linecount=0
+\def\@履歴リスト前半{}
+\def\@履歴リスト後半{}
+\def\リスト振り分け#1{
+	\advance \linecount by 1
+	\ifnum\linecount>\履歴リスト前半行数
+		\追加\@履歴リスト後半{#1}
+	\else
+		\追加\@履歴リスト前半{#1}
+	\fi
+}
+\def\学歴職歴リスト編集{
+	\ifx\@学歴リスト\empty\else
+		\リスト振り分け{c:0:学歴:}
+		\@for\linebuf:=\@学歴リスト\do{%
+			\リスト振り分け\linebuf
+		}
+	\fi
+	\ifx\@職歴リスト\empty\else
+		\if空行書き出し
+			\ifnum\linecount>0
+				\リスト振り分け{s:0:0:}
+			\fi
+		\fi
+		\リスト振り分け{c:0:職歴:}
+		\@for\linebuf:=\@職歴リスト\do{%
+			\リスト振り分け\linebuf
+		}
+	\fi
+	\ifnum\linecount>0
+		\リスト振り分け{r:0:以上:}
+	\fi
+}
+\newif\if空行書き出し\空行書き出しfalse
+\def\空行挿入{
+	\空行書き出しtrue
+}
+%
+% \リスト書き出し<リスト><書き出し最大行数>
+%
+\def\リスト書き出し#1#2{% 使用前に、\offset の初期化が必要です。
+	\newcount\linecount\linecount=0
+	\def\right{r}
+	\def\center{c}
+	\def\space{s}
+	\@for\linebuf:=#1\do{%
+		\expandafter\分解\linebuf
+		\advance \linecount by 1
+		\ifnum\linecount>#2
+			\typeout{[警告] 最大行数を超えているので、印刷できません。(\three)}
+		\else
+			\if\one\right
+				\Put(25,\offset){\makebox(\履歴説明幅,\履歴リスト１行の高さ)[r]{\normalsize \three\hspace{20mm}}}
+			\else\if\one\center
+				\Put(25,\offset){\makebox(\履歴説明幅,\履歴リスト１行の高さ)[c]{\normalsize \three\hspace{20mm}}}
+			\else\if\one\space
+				\relax
+			\else
+				\Put(0,\offset){\makebox(17,\履歴リスト１行の高さ)[c]{\normalsize \one}}
+				\Put(17,\offset){\makebox(8,\履歴リスト１行の高さ)[c]{\normalsize \two}}
+				\Put(25,\offset){\makebox(\履歴説明幅,\履歴リスト１行の高さ)[l]{\normalsize \hspace{5mm}\three}}
+			\fi\fi\fi
+		\fi
+		\Add\offset{\履歴リスト１行の高さ}\offset
+	}
+}
+%----------------------------------------------------------------------------
+%
+% 履歴書の書き出し
+%
+%----------------------------------------------------------------------------
+\let\enddocumentorg=\enddocument
+\def\enddocument{
+\writepages
+\enddocumentorg
+}
+%----------------------------------------------------------------------------
+%
+% マクロ定義
+%
+%----------------------------------------------------------------------------
+%
+% ID情報
+%
+\def\姓#1{\def\@姓{#1}}
+\def\姓読み#1{\def\@姓読み{#1}}
+\def\名#1{\def\@名{#1}}
+\def\名読み#1{\def\@名読み{#1}}
+\def\性別#1{\def\@性別{#1}}
+\def\誕生日#1{\def\@誕生日{#1}}
+\def\年齢#1{\def\@年齢{#1}}
+\def\本籍#1{\def\@本籍{#1}}			% 旧版との互換性のため
+\def\顔写真#1{\def\@顔写真{#1}}
+%
+% 現住所
+%
+\def\現住所郵便番号#1{\def\@現住所郵便番号{#1}}
+\def\現住所#1{\def\@現住所{#1}}
+\def\現住所読み#1{\def\@現住所読み{#1}}
+\def\現住所市外局番#1{\def\@現住所市外局番{#1}}
+\def\現住所電話番号#1{\def\@現住所電話番号{#1}}
+\def\現住所呼び出し#1{\def\@現住所呼び出し{#1}}
+%
+% 連絡先
+%
+\def\連絡先郵便番号#1{\def\@連絡先郵便番号{#1}}
+\def\連絡先#1{\def\@連絡先{#1}}
+\def\連絡先読み#1{\def\@連絡先読み{#1}}
+\def\連絡先市外局番#1{\def\@連絡先市外局番{#1}}
+\def\連絡先電話番号#1{\def\@連絡先電話番号{#1}}
+\def\連絡先呼び出し#1{\def\@連絡先呼び出し{#1}}
+%
+% 学歴、職歴、資格
+%
+\def\学歴#1#2#3{\追加\@学歴リスト{#1:#2:#3:}}
+\def\職歴#1#2#3{\追加\@職歴リスト{#1:#2:#3:}}
+\def\資格#1#2#3{\追加\@資格リスト{#1:#2:#3:}}
+\def\家族#1#2#3{\追加\@家族リスト{#1:#2:#3:}}	% 旧版との互換性のため
+%
+% 個人情報
+%
+\long\def\志望の動機#1{\def\@志望の動機{#1}}
+\def\得意な学科#1{\def\@得意な学科{#1}}		% 旧版との互換性のため
+\def\趣味#1{\def\@趣味{#1}}			% 旧版との互換性のため
+\def\スポーツ#1{\def\@スポーツ{#1}}		% 旧版との互換性のため
+\def\健康状態#1{\def\@健康状態{#1}}		% 旧版との互換性のため
+\long\def\本人希望記入欄#1{\def\@本人希望記入欄{#1}}
+%
+% その他
+%
+\def\通勤時間#1{\def\@通勤時間{#1}}
+\def\扶養家族数#1{\def\@扶養家族数{#1}}
+\def\配偶者#1{\def\@配偶者{#1}}
+\def\配偶者の扶養義務#1{\def\@配偶者の扶養義務{#1}}
+%
+% 保護者
+%
+\def\@保護者住所読み{}				% 旧版との互換性のため
+\def\保護者氏名#1{\def\@保護者氏名{#1}}
+\def\保護者郵便番号#1{\def\@保護者郵便番号{#1}}
+\def\保護者住所#1{\def\@保護者住所{#1}}
+\def\保護者住所読み#1{\def\@保護者住所読み{#1}}
+\def\保護者市外局番#1{\def\@保護者市外局番{#1}}
+\def\保護者電話番号#1{\def\@保護者電話番号{#1}}
+\def\保護者呼び出し#1{\def\@保護者呼び出し{#1}}
+
+\def\サイン#1{\def\@サイン{#1}}
+%----------------------------------------------------------------------------
+%
+% 書き出しページの内容
+%
+%----------------------------------------------------------------------------
+%
+% 各種定数
+%
+\def\枠の幅{149.5}
+\def\名前欄の幅{98}
+\def\住所欄の幅{117}
+\def\ふりがな欄の高さ{5}
+\def\写真縦{40}
+\def\写真横{30}
+
+\def\writepages{
+\def\ROOT@X{20}				% 1ページ目の原点
+\def\ROOT@Y{24}				% 1ページ目の原点
+\学歴職歴リスト編集
+\begin{picture}(\width,\height)		% B5 = (181x257mm)
+%\put(0,0){\framebox(\width,\height)}
+%----------------
+% 氏名住所
+%----------------
+% 大枠
+\SetPos(0,0) {
+	\def\枠の高さ{66.5}
+	\Put(0,-1){\makebox(25,5)[t]{\Large \bf 履\hspace{5mm}歴\hspace{5mm}書}}
+	\Put(70,-1){\makebox(25,3)[t]{\scriptsize \today 現在}}
+	\Sub{\写真横}{2}{\w}
+	\Sub{\写真縦}{2}{\h}
+	\Put(103.5,28.5){\dashbox{.5}(\w,\h)[c]{\parbox{\w mm}{\center\scriptsize 写真をはる位置\\\vspace{1mm}(縦\写真縦 mm, 横\写真横 mm)}}}
+	\ifx\@顔写真\empty\else
+		\Put(103.5,28.5){\includegraphics[height=4cm]{\@顔写真}}
+	\fi
+	%
+	\linethickness{0.5mm}
+	\Add{\名前欄の幅}{0.5}{\w}
+	\Put(-0.25,0){\line(1,0){\w}}
+	\Put(0,0){\line(0,-1){\枠の高さ}}
+	\Add{\枠の幅}{0.5}{\w}
+	\Put(-0.25,\枠の高さ){\line(1,0){\w}}
+	\Put(\名前欄の幅,0){\line(0,-1){31.5}}
+	\Put(\名前欄の幅,31.31){\line(1,0){51.75}}
+	\Put(\枠の幅,31.0){\line(0,-1){35.5}}
+	%
+	\linethickness{0.1mm}
+	\Put(0,5){\dashbox{.5}(\名前欄の幅,\ふりがな欄の高さ)[l]{\scriptsize \hspace{2mm}ふりがな}}
+	\Put(0,10){\makebox(\名前欄の幅,\ふりがな欄の高さ)[l]{\scriptsize \hspace{2mm}氏\hspace{5mm}名}}
+}
+\SetPos(25,0) {
+	\Put(0,5){\makebox(73,5)[l]{\scriptsize \@姓読み}}
+	\Put(20,5){\makebox(53,5)[l]{\scriptsize \@名読み}}
+	\Put(0,20){\makebox(73,16.5)[l]{\Large \@姓}}
+	\Put(20,20){\makebox(53,16.5)[l]{\Large \@名}}
+}
+\SetPos(0,19.5) {
+	\Put(0,0){\line(1,0){\名前欄の幅}}
+	\def\@editbuf{
+		\ifx\@年齢\empty\else
+			{\hspace{3mm}（満\hspace{2mm}\@年齢 才）}
+		\fi
+	}
+	\ifx\@誕生日\empty\else
+		\Put(0,12){\makebox(85.5,12)[c]{\@誕生日 生\@editbuf}}
+	\fi
+	\Put(85.5,0){\line(0,-1){12}}
+	\Put(85.5,5){\makebox(12.5,5)[l]{\hspace{2mm}\scriptsize 性別}}
+	\Put(85.5,14){\makebox(12.5,12)[c]{\small \@性別}}
+}
+\SetPos(0,31.5) {
+	\Put(0,0){\line(1,0){\名前欄の幅}}
+	\Put(0,\ふりがな欄の高さ){\dashbox{.5}(\住所欄の幅,\ふりがな欄の高さ)[l]{\scriptsize \hspace{2mm}ふりがな \hspace{10mm} \@現住所読み}}
+	\Put(0,10){\makebox(\住所欄の幅,5)[l]{\scriptsize \hspace{2mm}現\hspace{1mm}住\hspace{1mm}所\hspace{3mm}〒\hspace{2mm}\@現住所郵便番号}}
+	\Put(0,17.5){\makebox(\住所欄の幅,11.5)[c]{\normalsize \@現住所}}
+}
+\SetPos(\住所欄の幅,31.5) {
+	\Put(0,0){\line(0,-1){35.0}}
+	\Put(0,3.5){\makebox(32.5,3.5)[l]{\scriptsize \hspace{2mm}電話}}
+	\def\@editbuf{
+		\normalsize
+		\ifx\@現住所市外局番\empty\else
+			{\hspace{2mm}(\hspace{1mm}\@現住所市外局番\hspace{1mm})}
+		\fi
+	}
+	\Put(0,7){\makebox(32.5,3.5)[l]{\scriptsize \hspace{2mm}市外局番\@editbuf}}
+	\Put(0,12){\dashbox{.5}(32.5,5)[c]{\normalsize \@現住所電話番号}}
+	\Put(0,17){\makebox(32.5,5)[c]{\normalsize \@現住所呼び出し}}
+}
+\SetPos(0,49) {
+	\Put(0,0){\line(1,0){\枠の幅}}
+	\Put(0,\ふりがな欄の高さ){\dashbox{.5}(\住所欄の幅,\ふりがな欄の高さ)[l]{\scriptsize \hspace{2mm}ふりがな \hspace{10mm} \@連絡先読み}}
+	\Put(0,10){\makebox(\住所欄の幅,5)[l]{\scriptsize \hspace{2mm}連\hspace{1mm}絡\hspace{1mm}先\hspace{3mm}〒\hspace{2mm}\@連絡先郵便番号}}
+	\Put(0,17.5){\makebox(\住所欄の幅,11.5)[c]{\normalsize \@連絡先}}
+}
+\SetPos(\住所欄の幅,49) {
+	\Put(0,3.5){\makebox(32.5,3.5)[l]{\scriptsize \hspace{2mm}電話}}
+	\def\@editbuf{
+		\normalsize
+		\ifx\@連絡先市外局番\empty\else
+			{\hspace{2mm}(\hspace{1mm}\@連絡先市外局番\hspace{1mm})}
+		\fi
+	}
+	\Put(0,7){\makebox(32.5,3.5)[l]{\scriptsize \hspace{2mm}市外局番\@editbuf}}
+	\Put(0,12){\dashbox{.5}(32.5,5)[c]{\normalsize \@連絡先電話番号}}
+	\Put(0,17){\makebox(32.5,5)[c]{\normalsize \@連絡先呼び出し}}
+}
+%----------------
+% 学歴職歴
+%----------------
+% 大枠
+\SetPos(0,68.0) {
+	\def\枠の高さ{152}
+	\def\見出しの高さ{6}
+	\ThickBox(\枠の幅,\枠の高さ)
+	\Put(0,\見出しの高さ){\makebox(17,\見出しの高さ)[c]{\scriptsize 年}}
+	\Put(17,\見出しの高さ){\makebox(8,\見出しの高さ)[c]{\scriptsize 月}}
+	\Put(24,\見出しの高さ){\makebox(\履歴説明幅,\見出しの高さ)[c]{\scriptsize 学歴・職歴（各別にまとめて書く）}}
+	\MultiPut(0,\見出しの高さ)(0,-\履歴リスト１行の高さ){\履歴リスト前半行数}{\line(1,0){\枠の幅}}
+	\Put(25,0){\line(0,-1){\枠の高さ}}
+	\Put(0,\枠の高さ){\dashbox{.5}(17,\枠の高さ)}
+	\Add{6}{\履歴リスト１行の高さ}{\offset}
+	\リスト書き出し\@履歴リスト前半\履歴リスト前半行数
+}
+\end{picture}
+
+\newpage
+
+\def\ROOT@X{12.5}			% 2ページ目の原点
+\def\ROOT@Y{24}				% 2ページ目の原点
+\begin{picture}(\width,\height)		% B5 = (182x257mm)
+%----------------
+% 学歴・職歴(続き)
+%----------------
+\SetPos(0,0) {
+	\def\枠の高さ{37}
+	\def\見出しの高さ{6}
+	\ThickBox(\枠の幅,\枠の高さ)
+	\Put(0,\見出しの高さ){\makebox(17,\見出しの高さ)[c]{\scriptsize 年}}
+	\Put(17,\見出しの高さ){\makebox(8,\見出しの高さ)[c]{\scriptsize 月}}
+	\Put(24,\見出しの高さ){\makebox(\履歴説明幅,\見出しの高さ)[c]{\scriptsize 学歴・職歴（各別にまとめて書く）}}
+	\MultiPut(0,\見出しの高さ)(0,-\履歴リスト１行の高さ){4}{\line(1,0){\枠の幅}}
+	\Put(25,0){\line(0,-1){\枠の高さ}}
+	\Put(0,\枠の高さ){\dashbox{.5}(17,\枠の高さ)}
+	\def\offset{14}
+	\リスト書き出し\@履歴リスト後半\履歴リスト後半行数
+}
+%----------------
+% 免許・資格
+%----------------
+\SetPos(0,38.5) {
+	\def\枠の高さ{75}
+	\def\見出しの高さ{6}
+	\ThickBox(\枠の幅,\枠の高さ)
+	\Put(0,\見出しの高さ){\makebox(17,\見出しの高さ)[c]{\scriptsize 年}}
+	\Put(17,\見出しの高さ){\makebox(8,\見出しの高さ)[c]{\scriptsize 月}}
+	\Put(24,\見出しの高さ){\makebox(\履歴説明幅,\見出しの高さ)[c]{\scriptsize 免許・資格}}
+	\MultiPut(0,\見出しの高さ)(0,-\履歴リスト１行の高さ){9}{\line(1,0){\枠の幅}}
+	\Put(25,0){\line(0,-1){\枠の高さ}}
+	\Put(0,\枠の高さ){\dashbox{.5}(17,\枠の高さ)}
+	\def\offset{14}
+	\リスト書き出し\@資格リスト{9}
+}
+%----------------
+% 志望の動機など
+%----------------
+\SetPos(0,115) {
+	\def\枠の高さ{51.0}
+	\def\見出しの高さ{5}
+	\def\その他の高さ{10}
+	\def\その他の幅{37}
+	\ThickBox(\枠の幅,\枠の高さ)
+	\Put(0,\見出しの高さ){\makebox(103,\見出しの高さ)[l]{\scriptsize \hspace{1mm}志望の動機、特技、好きな学科、アピールポイントなど}}
+	\Put(2,39.0){\makebox(141.5,31.0)[t]{\parbox{141.5 mm}{\normalsize \@志望の動機}}}
+	\Put(0,41.0){\line(1,0){\枠の幅}}
+	% 小見出し%
+	\def\見出しの高さ{4}
+	\def\x{0}
+	\Put(\x,  45.0){\makebox(\その他の幅,\見出しの高さ)[l]{\scriptsize \hspace{1mm}通勤時間}}
+	\Add{\x}{\その他の幅}{\x}
+	\Put(\x, 51.0){\line(0,1){\その他の高さ}}
+	\Put(\x, 45.0){\makebox(\その他の幅,\見出しの高さ)[l]{\scriptsize \hspace{1mm}扶養家族数（配偶者を除く）}}
+	\Add{\x}{\その他の幅}{\x}
+	\Put(\x, 51.0){\line(0,1){\その他の高さ}}
+	\Put(\x, 45.0){\makebox(\その他の幅,\見出しの高さ)[l]{\scriptsize \hspace{1mm}配偶者}}
+	\Add{\x}{\その他の幅}{\x}
+	\Put(\x, 51.0){\line(0,1){\その他の高さ}}
+	\Put(\x,45.0){\makebox(\その他の幅,\見出しの高さ)[l]{\scriptsize \hspace{1mm}配偶者の扶養義務}}
+	%
+	\def\h{6}
+	\def\y{50}
+	\def\x{0}
+	\Put(\x,\y){\makebox(\その他の幅,\h)[c]{\normalsize \@通勤時間}}
+	\Add{\x}{\その他の幅}{\x}
+	\if\@扶養家族数\empty\else
+		\Put(\x,\y){\makebox(\その他の幅,\h)[c]{\normalsize \@扶養家族数 人}}
+	\fi
+	\Add{\x}{\その他の幅}{\x}
+	\Put(\x,\y){\makebox(\その他の幅,\h)[c]{\normalsize \@配偶者}}
+	\Add{\x}{\その他の幅}{\x}
+	\Put(\x,\y){\makebox(\その他の幅,\h)[c]{\normalsize \@配偶者の扶養義務}}
+}
+%----------------
+% 本人希望記入欄
+%----------------
+%\SetPos(0,146.0) {
+\SetPos(0,167.5) {
+	\def\枠の高さ{52}
+	\def\見出しの高さ{6}
+	\ThickBox(\枠の幅,\枠の高さ)
+	\Put(0,\見出しの高さ){\makebox(\枠の幅,\見出しの高さ)[l]{\scriptsize \hspace{1mm}本人希望記入欄（特に給料・職種・勤務時間・勤務地・その他についての希望があれば記入）}}
+	\Put(2,50){\makebox(141.5,42)[t]{\parbox{141.5 mm}{\normalsize \@本人希望記入欄}}}
+}
+\SetPos(0,220) {
+	\def\見出しの高さ{5}
+	\Put(76,\見出しの高さ){\makebox(76,\見出しの高さ)[r]{\scriptsize\it \@サイン}}
+}
+\end{picture}
+}
+%----------------------------------------------------------------------------
+% 書き出しページの内容終り
+%----------------------------------------------------------------------------

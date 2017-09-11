@@ -1,0 +1,129 @@
+ 
+  Copyright (c) 1996, 1998, 1999, 2000, 2003, 2004, 2006, 2009,
+	2013, 2014, 2016
+  Tama Communications Corporation. All rights reserved.
+ 
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+  1. Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+ 
+  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  SUCH DAMAGE.
+ 
+                ----------------------------------
+
+履歴書スタイルファイル履歴		有限会社多摩通信社
+
+Version 2.7	2016年2月12日
+
+	・左右マージンがそろっていないのを直しました。
+	  （右マージンが1.5mm ほど短くなっていました）
+	・確実にページサイズを伝えるため、dvipdfmx の引数としてページサイズを
+	  直接渡すようにしました。
+	・A4 用紙にトンボ付きで出力する機能を削除しました。
+
+Version 2.6	2014年8月12日
+
+	・写真の埋め込みができるようにしました。
+	・出力方法をPDFを経由したものに書き換えました。
+
+Version 2.5	2014年1月17日
+
+	漢字コードをEUCからUTF-8 に変更しました。
+
+Version 2.4	2013年8月26日
+
+	2008年の新JIS規格に準拠しました。
+	・保護者欄を削除しました。
+	・志望の動機欄を拡張しました。
+	・「志望の動機、特技、好きな学科など」を「志望の動機、特技、好きな学科、
+	  アピールポイントなど」に変更し、欄を拡大しました。
+
+	・写真枠を30mm×40mm よりもやや小さくしました。
+	  (写真を貼った際に、枠が見えなくするためです)
+	
+Version 2.3	2013年7月9日
+
+	・B5 用紙に直接出力する場合の印字位置のずれを直しました。
+	・枠の四隅の交点がきちんと合っていない不具合を直しました。
+	・漢字項目を囲っていた括弧を、バランスを考えて全角括弧に変更しました。
+
+Version 2.2	2009年11月17日
+
+	・サンプルファイル(rireki.tex)の中身を書き直しました。
+	
+Version 2.1	2006年12月15日
+
+	・再配布可能であることを明示するために、すべてのファイルにライセンス
+	  を付加しました。ライセンスの内容につきましてはREADME ファイルを
+	  ご参照ください。
+	・サンプルファイル(rireki.tex)をLaTeX スタイルから pLaTeX2 スタイルに
+	  変更しました。
+	・いくつかの細かな修正を行いました。
+
+Version 2.0	2004年2月10日
+
+	最近の履歴書のスタイルに合わせて改訂しました。
+
+	・学歴、職歴欄を拡張しました。合わせて20個まで記入できます。
+	・\空行挿入 マクロを追加しました。学歴と職歴の間に空行を挿入できます。
+	・README の「スタイルファイル書き換えのためのヒント」は、スタイルファイル
+	  本体の注釈に移動しました。
+
+Version 1.4.1	2003年2月27日
+
+	README と HISTORY の記述を変更しました。
+	プログラム本体には変更はありません。
+
+	変更内容は下記の通りです。
+
+	・履歴書プロジェクトのURL を新しいものに変更しました。
+	・HISTORY 内の履歴の順番を新しいもの順に変更しました。
+	・[利用条件]の中の下記の記述を削除しました。
+		本スタイルファイルによる履歴書で面接を受ける際に、
+		コンピュータの有効利用を印象付けるため、面接官に対して
+		「この履歴書のスタイルファイルは私が作りました。」
+		と言って構いません。
+
+Version 1.4	2000年1月21日
+
+	BSD スタイルのライセンスから、FreeBSD スタイルのライセンスに
+	変更しました。(ライセンスがさらに緩くなりました。)
+
+Version 1.3	1999年8月7日
+
+	Windows で使いたいと希望される方が多いので、WIN32版を作りました。
+	漢字コードと改行コードが違うだけで、中身は同じです。
+
+Version 1.2	1998年4月1日
+
+	下記のバグを修正しました。
+
+	・保護者欄の"(本人が未成年者の場合のみ記入)"の終りの括弧がない。
+
+Version 1.1	1996年11月11日
+
+	下記のバグを修正しました。
+
+	・複数行の記述が可能なはずの欄で、折り返しが行なえないために
+	  一行しか記入出来ない。
+	  修正された欄:
+		得意な学科、健康状態、趣味、スポーツ、志望の動機、本人記入欄
+
+Version 1.0	1996年10月13日
+
+	初版
