@@ -1,5 +1,5 @@
 %
-% Copyright (c) 1996, 2004, 2013, 2014, 2016
+% Copyright (c) 1996, 2004, 2013, 2014, 2016, 2019
 % Tama Communications Corporation. All rights reserved.
 %
 % Redistribution and use in source and binary forms, with or without
@@ -23,7 +23,7 @@
 % OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 % SUCH DAMAGE.
 %
-%	rireki.sty	Version 2.7
+%	rireki.sty	Version 2.8
 %
 \typeout{`Rireki style(B5)'}
 \usepackage[dvipdfmx]{graphicx}
@@ -281,6 +281,7 @@
 \def\名読み#1{\def\@名読み{#1}}
 \def\性別#1{\def\@性別{#1}}
 \def\誕生日#1{\def\@誕生日{#1}}
+\def\現在日付#1{\def\@現在日付{#1}}
 \def\年齢#1{\def\@年齢{#1}}
 \def\本籍#1{\def\@本籍{#1}}			% 旧版との互換性のため
 \def\顔写真#1{\def\@顔写真{#1}}
@@ -366,7 +367,7 @@
 \SetPos(0,0) {
 	\def\枠の高さ{66.5}
 	\Put(0,-1){\makebox(25,5)[t]{\Large \bf 履\hspace{5mm}歴\hspace{5mm}書}}
-	\Put(70,-1){\makebox(25,3)[t]{\scriptsize \today 現在}}
+	\Put(70,-1){\makebox(25,3)[t]{\scriptsize \@現在日付 現在}}
 	\Sub{\写真横}{2}{\w}
 	\Sub{\写真縦}{2}{\h}
 	\Put(103.5,28.5){\dashbox{.5}(\w,\h)[c]{\parbox{\w mm}{\center\scriptsize 写真をはる位置\\\vspace{1mm}(縦\写真縦 mm, 横\写真横 mm)}}}
