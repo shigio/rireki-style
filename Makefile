@@ -23,6 +23,8 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
+VERSION = 2.8
+DISTDIR = rireki-$(VERSION)
 PDF = rireki.pdf
 DVI = rireki.dvi
 
@@ -31,9 +33,9 @@ all: $(PDF)
 dvi: $(DVI)
 pdf: $(PDF)
 
-rireki.pdf: rireki.dvi
-	dvipdfmx -p "182mm,257mm" rireki.dvi
-rireki.dvi: rireki.tex rireki.sty
+$(PDF): $(DVI)
+	dvipdfmx -p "182mm,257mm" $(DVI)
+$(DVI): rireki.tex rireki.sty
 	platex rireki
 # open コマンドは OSX のみ
 view: $(PDF)
@@ -41,6 +43,8 @@ view: $(PDF)
 print: $(PDF)
 	lpr $(PDF)
 package: clean
-	dir=`pwd`; name=`basename $$dir`; cd ..; tar czvf $$name.tar.gz $$name
+	rm -rf /tmp/$(DISTDIR); mkdir /tmp/$(DISTDIR)
+	ln * /tmp/$(DISTDIR)
+	cd /tmp && tar czvf $(DISTDIR).tar.gz $(DISTDIR)
 clean:
 	rm -f $(DVI) $(PDF) rireki.aux rireki.log
