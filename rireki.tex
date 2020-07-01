@@ -23,7 +23,20 @@
 % OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 % SUCH DAMAGE.
 %
-\documentclass{jarticle}
+\newif\iflualatex
+% lualatex を使用するには \lualatextrue を有効にしてください
+%\lualatextrue
+%
+% ヘッダー
+%
+\iflualatex
+\documentclass[b5j]{ltjsarticle}
+\usepackage[deluxe,nfssonly]{luatexja-preset}
+\usepackage{graphicx}
+\else
+\documentclass[uplatex,b5j]{jsarticle}
+\usepackage[dvipdfmx]{graphicx}
+\fi
 \usepackage{rireki}
 %
 % オプション
@@ -51,7 +64,7 @@
 % 次のように指定します。
 % \顔写真{photo.eps}
 %
-\顔写真{}
+\顔写真{photo.jpg}
 %
 % 現住所
 %
