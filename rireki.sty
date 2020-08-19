@@ -202,6 +202,13 @@
 		\追加\@履歴リスト前半{#1}
 	\fi
 }
+\def\リスト振り分け空行{
+	\ifnum\linecount=\履歴リスト前半行数
+		
+	\else
+		\リスト振り分け{:::}
+	\fi
+}
 \def\学歴職歴リスト編集{
 	\ifx\@学歴リスト\empty\else
 		\リスト振り分け{c:0:学歴:}
@@ -209,6 +216,7 @@
 			\リスト振り分け\linebuf
 		}
 	\fi
+	\リスト振り分け空行
 	\ifx\@職歴リスト\empty\else
 		\if空行書き出し
 			\ifnum\linecount>0
