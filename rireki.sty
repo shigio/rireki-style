@@ -1,5 +1,5 @@
 %
-% Copyright (c) 1996, 2004, 2013, 2014, 2016, 2019
+% Copyright (c) 1996, 2004, 2013, 2014, 2016, 2019, 2023
 % Tama Communications Corporation. All rights reserved.
 %
 % Redistribution and use in source and binary forms, with or without
@@ -23,7 +23,7 @@
 % OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 % SUCH DAMAGE.
 %
-%	rireki.sty	Version 2.9
+%	rireki.sty	Version 3.0
 %
 \typeout{`Rireki style(B5)'}
 %\usepackage[dvipdfmx]{graphicx}	% lualatex でも使えるようにrireki.tex に移動
@@ -322,10 +322,10 @@
 %
 % その他
 %
-\def\通勤時間#1{\def\@通勤時間{#1}}
-\def\扶養家族数#1{\def\@扶養家族数{#1}}
-\def\配偶者#1{\def\@配偶者{#1}}
-\def\配偶者の扶養義務#1{\def\@配偶者の扶養義務{#1}}
+\def\通勤時間#1{\def\@通勤時間{#1}}		% 旧版との互換性のため
+\def\扶養家族数#1{\def\@扶養家族数{#1}}		% 旧版との互換性のため
+\def\配偶者#1{\def\@配偶者{#1}}			% 旧版との互換性のため
+\def\配偶者の扶養義務#1{\def\@配偶者の扶養義務{#1}}	% 旧版との互換性のため
 %
 % 保護者
 %
@@ -508,38 +508,9 @@
 \SetPos(0,115) {
 	\def\枠の高さ{51.0}
 	\def\見出しの高さ{5}
-	\def\その他の高さ{10}
-	\def\その他の幅{37}
 	\ThickBox(\枠の幅,\枠の高さ)
 	\Put(0,\見出しの高さ){\makebox(103,\見出しの高さ)[l]{\scriptsize \hspace{1mm}志望の動機、特技、好きな学科、アピールポイントなど}}
 	\Put(2,39.0){\makebox(141.5,31.0)[t]{\parbox{141.5 mm}{\normalsize \@志望の動機}}}
-	\Put(0,41.0){\line(1,0){\枠の幅}}
-	% 小見出し%
-	\def\見出しの高さ{4}
-	\def\x{0}
-	\Put(\x,  45.0){\makebox(\その他の幅,\見出しの高さ)[l]{\scriptsize \hspace{1mm}通勤時間}}
-	\Add{\x}{\その他の幅}{\x}
-	\Put(\x, 51.0){\line(0,1){\その他の高さ}}
-	\Put(\x, 45.0){\makebox(\その他の幅,\見出しの高さ)[l]{\scriptsize \hspace{1mm}扶養家族数（配偶者を除く）}}
-	\Add{\x}{\その他の幅}{\x}
-	\Put(\x, 51.0){\line(0,1){\その他の高さ}}
-	\Put(\x, 45.0){\makebox(\その他の幅,\見出しの高さ)[l]{\scriptsize \hspace{1mm}配偶者}}
-	\Add{\x}{\その他の幅}{\x}
-	\Put(\x, 51.0){\line(0,1){\その他の高さ}}
-	\Put(\x,45.0){\makebox(\その他の幅,\見出しの高さ)[l]{\scriptsize \hspace{1mm}配偶者の扶養義務}}
-	%
-	\def\h{6}
-	\def\y{50}
-	\def\x{0}
-	\Put(\x,\y){\makebox(\その他の幅,\h)[c]{\normalsize \@通勤時間}}
-	\Add{\x}{\その他の幅}{\x}
-	\if\@扶養家族数\empty\else
-		\Put(\x,\y){\makebox(\その他の幅,\h)[c]{\normalsize \@扶養家族数 人}}
-	\fi
-	\Add{\x}{\その他の幅}{\x}
-	\Put(\x,\y){\makebox(\その他の幅,\h)[c]{\normalsize \@配偶者}}
-	\Add{\x}{\その他の幅}{\x}
-	\Put(\x,\y){\makebox(\その他の幅,\h)[c]{\normalsize \@配偶者の扶養義務}}
 }
 %----------------
 % 本人希望記入欄

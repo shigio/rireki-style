@@ -1,6 +1,6 @@
  
   Copyright (c) 1996, 1998, 1999, 2000, 2003, 2004, 2006, 2009,
-	2013, 2014, 2016, 2019, 2020
+	2013, 2014, 2016, 2019, 2020, 2023
   Tama Communications Corporation. All rights reserved.
  
   Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,17 @@
 
 履歴書スタイルファイル履歴		有限会社多摩通信社
 
+Version 3.0	2023年10月7日
+
+	厚生労働省の指導に従い、「通勤時間」「扶養家族数（配偶者を除く）」
+	「配偶者」「配偶者の扶養義務」の欄を削除しました。
+
+	変更依頼をくださった TANIGUCHI Takaki 様に感謝いたします。
+
+	[https://www.mhlw.go.jp/www2/topics/topics/saiyo/dl/saiyo-10.pdf]
+	2. 各欄（「通勤時間」「扶養家族数（配偶者を除く）」「配偶者」
+	「配偶者の扶養義務」）の４項目は設けないこととします。
+
 Version 2.9	2020年7月1日
 
 	・lualatex でも使用できるようにしました。
@@ -38,7 +49,7 @@ Version 2.9	2020年7月1日
 		...
 		\lualatextrue
 
-	  lualatex についての提案と情報をいただいた Der Spiegel im Spiegel 様に
+	  lualatex についての提案と情報をくださった Der Spiegel im Spiegel 様に
 	  感謝いたします。
 
 Version 2.8	2019年5月14日
