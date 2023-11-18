@@ -23,7 +23,6 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-VERSION = 3.0
 TARGET = rireki.pdf
 LATEX = uplatex
 #LATEX = lualatex
@@ -41,5 +40,6 @@ view: $(TARGET)
 	open $(TARGET)
 print: $(TARGET)
 	lpr $(TARGET)
+do: all view
 clean:
 	rm -f $(TARGET) *.dvi *.aux *.log photo-eps-converted-to.pdf

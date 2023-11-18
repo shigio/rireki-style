@@ -23,7 +23,9 @@
 % OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 % SUCH DAMAGE.
 %
-%	rireki.sty	Version 3.0
+%	rireki.sty	Version 3.1
+%
+%	URL: https://www.tamacom.com/rireki-j.html
 % 
 \typeout{`Rireki style(B5)'}
 %\usepackage[dvipdfmx]{graphicx}	% lualatex でも使えるようにrireki.tex に移動
@@ -236,6 +238,14 @@
 \def\空行挿入{
 	\空行書き出しtrue
 }
+\newif\if性別欄なし\性別欄なしfalse
+\def\性別欄なし{
+	\性別欄なしtrue
+}
+\newif\if写真欄なし\写真欄なしfalse
+\def\写真欄なし{
+	\写真欄なしtrue
+}
 %
 % \リスト書き出し<リスト><書き出し最大行数>
 %
@@ -359,6 +369,8 @@
 \def\名前欄の幅{98}
 \def\住所欄の幅{117}
 \def\ふりがな欄の高さ{5}
+\def\性別欄の高さ{12}
+\def\性別欄の幅{12}
 \def\写真縦{40}
 \def\写真横{30}
 
@@ -372,15 +384,21 @@
 % 氏名住所
 %----------------
 % 大枠
+\if写真欄なし
+	\def\名前欄の幅{\枠の幅}
+\fi
+\Sub{\名前欄の幅}{\性別欄の幅}{\性別欄の書き出し位置}
 \SetPos(0,0) {
 	\def\枠の高さ{66.5}
-	\Put(0,-1){\makebox(25,5)[t]{\Large \bf 履\hspace{5mm}歴\hspace{5mm}書}}
-	\Put(70,-1){\makebox(25,3)[t]{\scriptsize \@現在日付 現在}}
-	\Sub{\写真横}{2}{\w}
-	\Sub{\写真縦}{2}{\h}
-	\Put(103.5,28.5){\dashbox{.5}(\w,\h)[c]{\parbox{\w mm}{\center\scriptsize 写真をはる位置\\\vspace{1mm}(縦\写真縦 mm, 横\写真横 mm)}}}
-	\ifx\@顔写真\empty\else
-		\Put(103.5,28.5){\includegraphics[height=4cm]{\@顔写真}}
+	\Put(0,-1){\makebox(\名前欄の幅,5)[l]{\Large \bf 履\hspace{5mm}歴\hspace{5mm}書}}
+	\Put(0,-1){\makebox(\名前欄の幅,3)[r]{\scriptsize \@現在日付 現在}}
+	\if写真欄なし\else
+		\Sub{\写真横}{2}{\w}
+		\Sub{\写真縦}{2}{\h}
+		\Put(103.5,28.5){\dashbox{.5}(\w,\h)[c]{\parbox{\w mm}{\center\scriptsize 写真をはる位置\\\vspace{1mm}(縦\写真縦 mm, 横\写真横 mm)}}}
+		\ifx\@顔写真\empty\else
+			\Put(103.5,28.5){\includegraphics[height=4cm]{\@顔写真}}
+		\fi
 	\fi
 	%
 	\linethickness{0.5mm}
@@ -390,7 +408,9 @@
 	\Add{\枠の幅}{0.5}{\w}
 	\Put(-0.25,\枠の高さ){\line(1,0){\w}}
 	\Put(\名前欄の幅,0){\line(0,-1){31.5}}
-	\Put(\名前欄の幅,31.31){\line(1,0){51.75}}
+	\if写真欄なし\else
+		\Put(\名前欄の幅,31.31){\line(1,0){51.75}}
+	\fi
 	\Put(\枠の幅,31.0){\line(0,-1){35.5}}
 	%
 	\linethickness{0.1mm}
@@ -411,11 +431,14 @@
 		\fi
 	}
 	\ifx\@誕生日\empty\else
-		\Put(0,12){\makebox(85.5,12)[c]{\@誕生日 生\@editbuf}}
+		\Put(0,\性別欄の高さ){\makebox(\名前欄の幅,\性別欄の高さ)[c]{\@誕生日 生\@editbuf}}
 	\fi
-	\Put(85.5,0){\line(0,-1){12}}
-	\Put(85.5,5){\makebox(12.5,5)[l]{\hspace{2mm}\scriptsize 性別}}
-	\Put(85.5,14){\makebox(12.5,12)[c]{\small \@性別}}
+	\if性別欄なし\else
+		\Put(\性別欄の書き出し位置,0){\line(0,-1){\性別欄の高さ}}
+		\Put(\性別欄の書き出し位置,0){\line(0,-1){\性別欄の幅}}
+		\Put(\性別欄の書き出し位置,5){\makebox(\性別欄の幅,5)[l]{\hspace{2mm}\scriptsize 性別}}
+		\Put(\性別欄の書き出し位置,14){\makebox(\性別欄の幅,\性別欄の高さ)[c]{\small \@性別}}
+	\fi
 }
 \SetPos(0,31.5) {
 	\Put(0,0){\line(1,0){\名前欄の幅}}
